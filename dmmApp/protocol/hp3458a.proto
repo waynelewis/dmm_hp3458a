@@ -1,0 +1,6 @@
+terminator = "\n";
+
+ask {
+  out "\$1";
+  in "\$2";
+}

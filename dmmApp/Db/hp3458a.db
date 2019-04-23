@@ -1,0 +1,5 @@
+record(stringin, "$(P)ID") {
+    field(DTYP, "stream")
+    field(INP , "@hp3458a.proto ask(ID?,%s) $(PORT)")
+    field(SCAN, "10 second")
+}

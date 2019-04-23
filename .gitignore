@@ -6,4 +6,5 @@ db/
 dbd/
 include/
 lib/
+protocol/
 envPaths

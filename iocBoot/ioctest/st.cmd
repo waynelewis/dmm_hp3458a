@@ -1,21 +1,15 @@
 #!../../bin/linux-x86_64/dmm
 
-#- You may have to change dmm to something else
-#- everywhere it appears in this file
-
-< envPaths
-
-cd "${TOP}"
-
-## Register all support components
-dbLoadDatabase "dbd/dmm.dbd"
+dbLoadDatabase "../../dbd/dmm.dbd"
 dmm_registerRecordDeviceDriver pdbbase
 
-## Load record instances
-#dbLoadRecords("db/xxx.db","user=mdavidsaver")
+epicsEnvSet("STREAM_PROTOCOL_PATH", "${PWD}/../../protocol")
+epicsEnvSet("EPICS_DB_INCLUDE_PATH", "${PWD}/../../db")
 
-cd "${TOP}/iocBoot/${IOC}"
+vxi11Configure("DMM", "192.168.1.40", 0, "5.0", "gpib0,22")
+
+#asynOctetSetInputEos("DMM", -1, "\n")
+
+dbLoadRecords("hp3458a.db","P=DMM:,PORT=DMM")
+
 iocInit
-
-## Start any sequence programs
-#seq sncxxx,"user=mdavidsaver"

@@ -14,12 +14,16 @@ DBD += dmm.dbd
 
 # dmm.dbd will be made up from these files:
 dmm_DBD += base.dbd
+dmm_DBD += asyn.dbd
+dmm_DBD += drvVxi11.dbd
+dmm_DBD += stream.dbd
 
 # Include dbd files from all support applications:
 #dmm_DBD += xxx.dbd
 
 # Add all the support libraries needed by this IOC
-#dmm_LIBS += xxx
+dmm_LIBS += stream
+dmm_LIBS += asyn
 
 # dmm_registerRecordDeviceDriver.cpp derives from dmm.dbd
 dmm_SRCS += dmm_registerRecordDeviceDriver.cpp
