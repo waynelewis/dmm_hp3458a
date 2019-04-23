@@ -1,0 +1,9 @@
+*~
+O.*/
+*.local
+bin/
+db/
+dbd/
+include/
+lib/
+envPaths
