@@ -12,13 +12,15 @@ err {
 
 errstr {
     out "ERRSTR?";
-    in "%s";
+    in "%80c";
 }
 
+# setup trigger disarmed. synchronous trigger
 setup {
     out "TARM HOLD;TRIG SYN;NRDGS 1,AUTO";
 }
 
+# restore auto trigger
 detach {
     out "TARM AUTO;TRIG AUTO;NRDGS 1,AUTO";
 }
