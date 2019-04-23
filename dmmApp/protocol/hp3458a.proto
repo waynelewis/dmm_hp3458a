@@ -1,6 +1,29 @@
 terminator = "\r\n";
 
-ask {
-  out "\$1";
-  in "\$2";
+idn {
+    out "ID?";
+    in "%s";
+}
+
+err {
+    out "ERR?";
+    in "%u";
+}
+
+errstr {
+    out "ERRSTR?";
+    in "%s";
+}
+
+setup {
+    out "TARM HOLD;TRIG SYN;NRDGS 1,AUTO";
+}
+
+detach {
+    out "TARM AUTO;TRIG AUTO;NRDGS 1,AUTO";
+}
+
+sample {
+    out "TARM SGL";
+    in "%f";
 }
