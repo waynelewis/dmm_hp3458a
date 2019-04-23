@@ -8,8 +8,10 @@ epicsEnvSet("EPICS_DB_INCLUDE_PATH", "${PWD}/../../db")
 
 vxi11Configure("DMM", "192.168.1.40", 0, "5.0", "gpib0,22")
 
-#asynOctetSetInputEos("DMM", -1, "\n")
+#asynSetTraceMask("DMM",-1,0x3f)
+#asynSetTraceIOMask("DMM",-1,2)
 
 dbLoadRecords("hp3458a.db","P=DMM:,PORT=DMM")
 
 iocInit
+

@@ -1,4 +1,4 @@
-terminator = "\n";
+terminator = "\r\n";
 
 ask {
   out "\$1";
