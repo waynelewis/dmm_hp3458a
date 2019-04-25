@@ -1,4 +1,6 @@
 record(stringin, "$(P)ID") {
+    field(SDIS, "$(P)RUN")
+    field(DISV, "0") # disable while Paused
     field(DTYP, "stream")
     field(INP , "@hp3458a.proto idn $(PORT)")
     field(SCAN, "10 second")

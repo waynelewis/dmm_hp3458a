@@ -1,4 +1,10 @@
-terminator = "\r\n";
+OutTerminator= "\n";
+InTerminator = "\r\n";
+LockTimeout = 5000;
+ReplyTimeout = 5000;
+
+WriteTimeout = 5000;
+ReadTimeout = 5000;
 
 idn {
     out "ID?";
