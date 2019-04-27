@@ -8,6 +8,9 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
+LIBRARY_IOC += barrier
+barrier_SRCS += barrier.c
+
 PROD_IOC = dmm
 # dmm.dbd will be created and installed
 DBD += dmm.dbd
@@ -17,6 +20,7 @@ dmm_DBD += base.dbd
 dmm_DBD += asyn.dbd
 dmm_DBD += drvVxi11.dbd
 dmm_DBD += stream.dbd
+dmm_DBD += barrierSupport.dbd
 
 # Include dbd files from all support applications:
 #dmm_DBD += xxx.dbd
@@ -24,6 +28,7 @@ dmm_DBD += stream.dbd
 # Add all the support libraries needed by this IOC
 dmm_LIBS += stream
 dmm_LIBS += asyn
+dmm_LIBS += barrier
 
 # dmm_registerRecordDeviceDriver.cpp derives from dmm.dbd
 dmm_SRCS += dmm_registerRecordDeviceDriver.cpp
