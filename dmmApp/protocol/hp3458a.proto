@@ -33,5 +33,8 @@ detach {
 
 sample {
     out "TARM SGL";
+}
+
+readout {
     in "%f";
 }

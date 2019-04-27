@@ -1,25 +1,8 @@
-record(stringin, "$(P)ID") {
-    field(SDIS, "$(P)RUN")
-    field(DISV, "0") # disable while Paused
-    field(DTYP, "stream")
-    field(INP , "@hp3458a.proto idn $(PORT)")
-    field(SCAN, "10 second")
-    field(FLNK, "$(P)ERR")
-    field(TPRO, "$(TPRO=)")
-}
-
-record(longin, "$(P)ERR") {
-    field(DTYP, "stream")
-    field(INP , "@hp3458a.proto err $(PORT)")
-    field(FLNK, "$(P)ERRMSG")
-    field(TPRO, "$(TPRO=)")
-}
-
-record(stringin, "$(P)ERRMSG") {
-    field(DTYP, "stream")
-    field(INP , "@hp3458a.proto errstr $(PORT)")
-    field(TPRO, "$(TPRO=)")
-}
+# readout for a single HP 3458a DMM
+#
+# macros
+#  P    - record name prefix
+#  PORT - asyn port
 
 record(bo, "$(P)RUN") {
     field(ZNAM, "Pause")
@@ -40,7 +23,6 @@ record(bo, "$(P)ENA_") {
     field(DTYP, "stream")
     field(OUT , "@hp3458a.proto setup $(PORT)")
     field(TPRO, "$(TPRO=)")
-    field(FLNK, "$(P)I.PROC CA") # start first measurement
 }
 
 record(bo, "$(P)DIS_") {
@@ -51,12 +33,21 @@ record(bo, "$(P)DIS_") {
     field(TPRO, "$(TPRO=)")
 }
 
-
-record(ai, "$(P)I") {
+record(bo, "$(P)SAMP_") {
     field(SDIS, "$(P)RUN NPP")
     field(DISV, "0") # disable while Paused
     field(DTYP, "stream")
-    field(INP , "@hp3458a.proto sample $(PORT)")
+    field(OUT , "@hp3458a.proto sample $(PORT)")
+    field(SCAN, "1 second")
+    field(PHAS, "1")
+    field(TPRO, "$(TPRO=)")
+}
+
+record(ai, "$(P)I") {
+    field(DTYP, "stream")
+    field(INP , "@hp3458a.proto readout $(PORT)")
+    field(SCAN, "1 second")
+    field(PHAS, "2")
     field(EGU , "A")
     field(PREC, "9")
     field(FLNK, "$(P)CNT")
@@ -65,7 +56,6 @@ record(ai, "$(P)I") {
 
 record(calc, "$(P)CNT") {
     field(CALC, "VAL+1")
-    field(FLNK, "$(P)I.PROC CA") # loop back
 }
 
 record(calc, "$(P)RATE") {
