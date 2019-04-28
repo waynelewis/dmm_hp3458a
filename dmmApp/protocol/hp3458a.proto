@@ -7,10 +7,10 @@ WriteTimeout = 5000;
 ReadTimeout = 5000;
 
 @init {
-    out "TARM HOLD;TRIG AUTO;NRDGS 1,AUTO;INBUF ON";
+    out "TARM HOLD;TRIG AUTO;NRDGS 1,AUTO;INBUF ON;MEM FIFO";
 }
 # restore normal operation with
-# out "TARM AUTO;TRIG AUTO;NRDGS 1,AUTO;INBUF OFF";
+# out "TARM AUTO;TRIG AUTO;NRDGS 1,AUTO;INBUF OFF;MEM OFF";
 
 sample {
     out "TARM SGL";
