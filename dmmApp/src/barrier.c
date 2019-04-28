@@ -48,6 +48,10 @@ struct Barrier {
     CALLBACK done;
 
     ELLLIST waiters;
+    /* number of workers at barrier.
+     * Also serves as re-queue flag during barrier release process.
+     * Must be <= two times the number of waiters
+     */
     unsigned ready;
 };
 
@@ -107,6 +111,11 @@ static void barrier_done(CALLBACK *cb)
     callbackGetUser(barrier, cb);
     ELLNODE *cur;
     int last = 0;
+    int debug = 0;
+
+    /* Don't decrement barrier->ready until after processing.
+     * Some/all records may re-hit the barrier before we return!
+     */
 
     for(cur = ellFirst(&barrier->waiters); cur; cur = ellNext(cur))
     {
@@ -115,6 +124,7 @@ static void barrier_done(CALLBACK *cb)
         rset *sup = prec->rset;
 
         dbScanLock(prec);
+        debug |= prec->tpro>1;
         (*sup->process)(prec);
         dbScanUnlock(prec);
     }
@@ -126,6 +136,12 @@ static void barrier_done(CALLBACK *cb)
     last = barrier_check(barrier);
     epicsMutexUnlock(barrier->mutex);
 
+    if(debug)
+        errlogPrintf(" barrier %s %spassed\n",
+                        barrier->name,
+                        last ? "re-" : "");
+
+    /* all our records have already hit the barrier again */
     if(last)
         callbackRequest(&barrier->done);
 }
