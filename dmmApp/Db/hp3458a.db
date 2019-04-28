@@ -4,50 +4,36 @@
 #  P    - record name prefix
 #  PORT - asyn port
 
-record(bo, "$(P)RUN") {
-    field(ZNAM, "Pause")
-    field(ONAM, "Sample")
-    field(FLNK, "$(P)RUN_")
+record(longout, "$(P)SCAN_") {
+    field(DISV, "1") # I disable myself to prevent queues scans
+                     # If I'm getting behind, then better to drop scans
+    field(SCAN, "1 second")
+    field(VAL , "1")
+    field(OUT , "$(P)SCAN_.DISA NPP")
+    field(FLNK, "$(P)SYNC1_")
     field(TPRO, "$(TPRO=)")
 }
 
-record(fanout, "$(P)RUN_") {
-    field(LNK1, "$(P)DIS_")
-    field(LNK2, "$(P)ENA_")
-    field(TPRO, "$(TPRO=)")
-}
-
-record(bo, "$(P)ENA_") {
-    field(SDIS, "$(P)RUN")
-    field(DISV, "0") # disable while Paused
-    field(DTYP, "stream")
-    field(OUT , "@hp3458a.proto setup $(PORT)")
-    field(TPRO, "$(TPRO=)")
-}
-
-record(bo, "$(P)DIS_") {
-    field(SDIS, "$(P)RUN")
-    field(DISV, "1") # disable while Sampling
-    field(DTYP, "stream")
-    field(OUT , "@hp3458a.proto detach $(PORT)")
+# wait for any other DMMs to finish readout
+record(longout, "$(P)SYNC1_") {
+    field(DTYP, "Process Barrier")
+    field(OUT , "@arm$(BARRIER=global)")
+    field(FLNK, "$(P)SAMP_")
     field(TPRO, "$(TPRO=)")
 }
 
 # Arm for trigger
 record(bo, "$(P)SAMP_") {
-    field(SDIS, "$(P)RUN NPP")
-    field(DISV, "0") # disable while Paused
     field(DTYP, "stream")
     field(OUT , "@hp3458a.proto sample $(PORT)")
-    field(SCAN, "1 second")
-    field(FLNK, "$(P)SYNC_")
+    field(FLNK, "$(P)SYNC2_")
     field(TPRO, "$(TPRO=)")
 }
 
 # wait for any other DMMs to be armed
-record(longout, "$(P)SYNC_") {
+record(longout, "$(P)SYNC2_") {
     field(DTYP, "Process Barrier")
-    field(OUT , "@$(BARRIER=global)")
+    field(OUT , "@sample$(BARRIER=global)")
     field(FLNK, "$(P)I")
     field(TPRO, "$(TPRO=)")
 }
@@ -59,19 +45,19 @@ record(ai, "$(P)I") {
     field(PHAS, "2")
     field(EGU , "A")
     field(PREC, "9")
-    field(FLNK, "$(P)CNT")
+    field(FLNK, "$(P)SYNC3_")
     field(TPRO, "$(TPRO=)")
 }
 
-record(calc, "$(P)CNT") {
-    field(CALC, "VAL+1")
+# wait for readouts to complete
+record(longout, "$(P)SYNC3_") {
+    field(DTYP, "Process Barrier")
+    field(OUT , "@done$(BARRIER=global)")
+    field(FLNK, "$(P)DONE_")
+    field(TPRO, "$(TPRO=)")
 }
 
-record(calc, "$(P)RATE") {
-    field(DESC, "Update rate")
-    field(INPA, "$(P)CNT NPP")
-    field(CALC, "C:=A-B;B:=A;C/10")
-    field(SCAN, "10 second")
-    field(EGU , "Hz")
-    field(PREC, "1")
+record(longout, "$(P)DONE_") {
+    field(VAL , "0") # done.  Allow next scan
+    field(OUT , "$(P)SCAN_")
 }

@@ -6,30 +6,11 @@ ReplyTimeout = 5000;
 WriteTimeout = 5000;
 ReadTimeout = 5000;
 
-idn {
-    out "ID?";
-    in "%s";
-}
-
-err {
-    out "ERR?";
-    in "%u";
-}
-
-errstr {
-    out "ERRSTR?";
-    in "%80c";
-}
-
-# setup trigger disarmed. synchronous trigger
-setup {
+@init {
     out "TARM HOLD;TRIG AUTO;NRDGS 1,AUTO;INBUF ON";
 }
-
-# restore auto trigger
-detach {
-    out "TARM AUTO;TRIG AUTO;NRDGS 1,AUTO;INBUF OFF";
-}
+# restore normal operation with
+# out "TARM AUTO;TRIG AUTO;NRDGS 1,AUTO;INBUF OFF";
 
 sample {
     out "TARM SGL";
