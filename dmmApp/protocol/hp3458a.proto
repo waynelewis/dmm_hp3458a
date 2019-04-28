@@ -23,12 +23,12 @@ errstr {
 
 # setup trigger disarmed. synchronous trigger
 setup {
-    out "TARM HOLD;TRIG SYN;NRDGS 1,AUTO";
+    out "TARM HOLD;TRIG AUTO;NRDGS 1,AUTO;INBUF ON";
 }
 
 # restore auto trigger
 detach {
-    out "TARM AUTO;TRIG AUTO;NRDGS 1,AUTO";
+    out "TARM AUTO;TRIG AUTO;NRDGS 1,AUTO;INBUF OFF";
 }
 
 sample {

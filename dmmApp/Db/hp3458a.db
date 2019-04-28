@@ -33,20 +33,29 @@ record(bo, "$(P)DIS_") {
     field(TPRO, "$(TPRO=)")
 }
 
+# Arm for trigger
 record(bo, "$(P)SAMP_") {
     field(SDIS, "$(P)RUN NPP")
     field(DISV, "0") # disable while Paused
     field(DTYP, "stream")
     field(OUT , "@hp3458a.proto sample $(PORT)")
     field(SCAN, "1 second")
-    field(PHAS, "1")
+    field(FLNK, "$(P)SYNC_")
     field(TPRO, "$(TPRO=)")
 }
 
+# wait for any other DMMs to be armed
+record(longout, "$(P)SYNC_") {
+    field(DTYP, "Process Barrier")
+    field(OUT , "@$(BARRIER=global)")
+    field(FLNK, "$(P)I")
+    field(TPRO, "$(TPRO=)")
+}
+
+# Read sample from input buffer
 record(ai, "$(P)I") {
     field(DTYP, "stream")
     field(INP , "@hp3458a.proto readout $(PORT)")
-    field(SCAN, "1 second")
     field(PHAS, "2")
     field(EGU , "A")
     field(PREC, "9")
