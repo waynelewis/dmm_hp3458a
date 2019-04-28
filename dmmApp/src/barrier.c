@@ -14,13 +14,13 @@
 #endif
 
 #include <epicsAssert.h>
+#include <epicsStdio.h>
 #include <epicsString.h>
 #include <ellLib.h>
 #include <dbDefs.h>
 #include <epicsMutex.h>
 #include <callback.h>
 #include <cantProceed.h>
-#include <errlog.h>
 
 #include <dbLock.h>
 #include <link.h>
@@ -137,9 +137,9 @@ static void barrier_done(CALLBACK *cb)
     epicsMutexUnlock(barrier->mutex);
 
     if(debug)
-        errlogPrintf(" barrier %s %spassed\n",
-                        barrier->name,
-                        last ? "re-" : "");
+        printf(" barrier %s %spassed\n",
+               barrier->name,
+               last ? "re-" : "");
 
     /* all our records have already hit the barrier again */
     if(last)
@@ -169,16 +169,16 @@ static long hit_barrier(dbCommon* prec)
         last = barrier_check(barrier);
 
         if(prec->tpro>1)
-            errlogPrintf("%s : hits barrier %s%s\n",
-                         prec->name, barrier->name,
-                         last ? " last" : "");
+            printf("%s : hits barrier %s%s\n",
+                   prec->name, barrier->name,
+                   last ? " last" : "");
 
     } else {
         /* completion */
         prec->pact = 0;
         if(prec->tpro>1)
-            errlogPrintf("%s : passes barrier %s\n",
-                         prec->name, barrier->name);
+            printf("%s : passes barrier %s\n",
+                   prec->name, barrier->name);
     }
 
     epicsMutexUnlock(barrier->mutex);
