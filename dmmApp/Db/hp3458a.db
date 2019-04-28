@@ -59,5 +59,6 @@ record(longout, "$(P)SYNC3_") {
 
 record(longout, "$(P)DONE_") {
     field(VAL , "0") # done.  Allow next scan
-    field(OUT , "$(P)SCAN_")
+    field(OUT , "$(P)SCAN_.DISA")
+    field(TPRO, "$(TPRO=)")
 }
