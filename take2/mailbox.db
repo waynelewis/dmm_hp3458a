@@ -1,0 +1,40 @@
+record(aai, "$(P):I") {
+    field(FTVL, "DOUBLE")
+    field(NELM, "2")
+    field(FLNK, "$(P):19:I_")
+}
+
+record(subArray, "$(P):19:I_") {
+    field(INP , "$(P):I NPP")
+    field(FTVL, "DOUBLE")
+    field(MALM, "2")
+    field(INDX, "0")
+    field(FLNK, "$(P):19:I")
+}
+
+record(ai, "$(P):19:I") {
+    field(INP , "$(P):19:I_")
+    field(PREC, 9)
+    field(TSEL, "$(P):I.TIME")
+    field(FLNK, "$(P):22:I_")
+}
+
+record(subArray, "$(P):22:I_") {
+    field(INP , "$(P):I NPP")
+    field(FTVL, "DOUBLE")
+    field(MALM, "2")
+    field(INDX, "1")
+    field(FLNK, "$(P):22:I")
+}
+
+record(ai, "$(P):22:I") {
+    field(INP , "$(P):22:I_")
+    field(PREC, 9)
+    field(TSEL, "$(P):I.TIME")
+}
+
+
+record(ai, "$(P):LTIME") {
+    field(EGU , "s")
+    field(PREC, "3")
+}
