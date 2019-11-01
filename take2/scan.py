@@ -54,7 +54,7 @@ class Session(object):
             #  Don't hold bus lock while executing
             # MEM FIFO
             #  store sample data internally until read
-            I.write('TARM HOLD;TRIG AUTO;NRDGS 1,AUTO;INBUF ON;MEM FIFO')
+            I.write('EXTOUT APER,POS;TARM HOLD;TRIG EXT;NRDGS 1,AUTO;INBUF ON;MEM FIFO')
 
     def close(self):
         Is, self.Is = self.Is, []
@@ -81,8 +81,8 @@ class Session(object):
 def main(args):
     with Session(args) as S:
         while True:
-            S.setup()
             try:
+                S.setup()
                 T = time.time()+1.0
                 while True:
                     now = time.time()
@@ -100,7 +100,7 @@ def main(args):
                 break
             except: # errors, including timeout
                 _log.exception('Error')
-                time.sleep(10) # hold-off before reconnect
+                Sleep(10) # hold-off before reconnect
 
 if __name__=='__main__':
     args = getargs()

@@ -1,3 +1,11 @@
+record(bo, "$(P):RUN") {
+    field(ZNAM, "Pause")
+    field(ONAM, "Sample")
+
+    alias("$(P):19:RUN")
+    alias("$(P):22:RUN")
+}
+
 record(aai, "$(P):I") {
     field(FTVL, "DOUBLE")
     field(NELM, "2")
